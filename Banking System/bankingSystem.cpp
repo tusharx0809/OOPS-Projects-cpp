@@ -117,8 +117,12 @@ public:
     }
 
     void addAccount(int accNum, string name, double initialBalance, string accType) {
-        accounts.emplace_back(accNum, name, initialBalance, accType);
-        cout << "Account created successfully!" << endl;
+        if(findAccount(accNum) != NULL){
+            cout<<"Account Number already exists! Please try with another account number!"<<endl;
+        }else{
+            accounts.emplace_back(accNum, name, initialBalance, accType);
+            cout << "Account created successfully!" << endl;
+        }
     }
 
     void depositToAccount(int accNum, double amount) {
