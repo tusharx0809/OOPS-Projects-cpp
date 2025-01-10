@@ -101,4 +101,25 @@ public:
             cout<<"Account not found!"<<endl;
         }
     }
+    void transferMoney(int fromAccNum, int toAccNum, double amount){
+        Account* fromAccount = findAccount(fromAccNum);
+        Account* toAccount = findAccount(toAccNum);
+
+        if(fromAccount && toAccount){
+            if(fromAccount->withdraw(amount)){
+                toAccount->deposit(amount);
+                cout<<"Transfer Successfull!"<<endl;
+            }
+        }else{
+            cout<<"One or both accounts not found!"<<endl;
+        }
+    }
+    void displayAccountDetails(int accNum){
+        Account* account = findAccount(accNum);
+        if(account){
+            account->displayDetails();
+        }else{
+            cout<<"Account not found!"<<endl;
+        }
+    }
 };
