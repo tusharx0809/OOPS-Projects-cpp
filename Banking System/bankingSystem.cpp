@@ -2,12 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
-#include<vector>
+#include <vector>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
-class Account
-{
-
+class Account {
 private:
     int accountNumber;
     string name;
@@ -20,16 +20,13 @@ public:
         : accountNumber(accNum), name(accName), balance(initialBalance), accountType(accType) {}
 
     // Methods
-    void deposit(double amount)
-    {
+    void deposit(double amount) {
         balance += amount;
         cout << "Deposited: " << amount << ". New Balance: " << balance << endl;
     }
 
-    bool withdraw(double amount)
-    {
-        if (amount > balance)
-        {
+    bool withdraw(double amount) {
+        if (amount > balance) {
             cout << "Insufficient Balance!" << endl;
             return false;
         }
@@ -38,92 +35,133 @@ public:
         return true;
     }
 
-    void displayDetails() const
-    {
+    void displayDetails() const {
         cout << "Account number: " << accountNumber << endl;
         cout << "Name: " << name << endl;
         cout << "Balance: " << balance << endl;
         cout << "Account Type: " << accountType << endl;
     }
 
-    int getAccountNumber() const
-    {
+    int getAccountNumber() const {
         return accountNumber;
     }
 
-    double getBalance() const
-    {
+    double getBalance() const {
         return balance;
     }
 
-    void setBalance(double newBalance)
-    {
+    void setBalance(double newBalance) {
         balance = newBalance;
+    }
+
+    // Method to save account details to a string (for file writing)
+    string toFileString() const {
+        stringstream ss;
+        ss << accountNumber << " " << name << " " << balance << " " << accountType;
+        return ss.str();
+    }
+
+    // Static method to create an Account object from a file line
+    static Account fromFileString(const string& line) {
+        stringstream ss(line);
+        int accNum;
+        string name, accType;
+        double balance;
+        ss >> accNum >> name >> balance >> accType;
+        return Account(accNum, name, balance, accType);
     }
 };
 
-class Bank
-{
+class Bank {
 private:
     vector<Account> accounts;
-    Account* findAccount(int accountNumber)
-    {
-        for (auto &account : accounts)
-        {
-            if (account.getAccountNumber() == accountNumber)
-            {
+
+    // Helper method to find an account by number
+    Account* findAccount(int accountNumber) {
+        for (auto& account : accounts) {
+            if (account.getAccountNumber() == accountNumber) {
                 return &account;
             }
         }
         return NULL;
     }
 
+    // Helper method to load accounts from the file
+    void loadAccountsFromFile() {
+        ifstream file("accounts.txt");
+        string line;
+        while (getline(file, line)) {
+            if (!line.empty()) {
+                accounts.push_back(Account::fromFileString(line));
+            }
+        }
+        file.close();
+    }
+
+    // Helper method to save accounts to the file
+    void saveAccountsToFile() {
+        ofstream file("accounts.txt");
+        for (const auto& account : accounts) {
+            file << account.toFileString() << endl;
+        }
+        file.close();
+    }
+
 public:
-    void addAccount(int accNum, string name, double initialBalance, string accType){
-        accounts.emplace_back(accNum, name, initialBalance, accType); //constucts and Constructs and inserts an element at the end of accounts
-        cout<<"Account created successfully!"<<endl;
+    Bank() {
+        loadAccountsFromFile(); // Load accounts from file when the bank is created
     }
 
-    void depositToAccount(int accNum, double amount){
+    ~Bank() {
+        saveAccountsToFile(); // Save accounts to file when the bank is destroyed
+    }
+
+    void addAccount(int accNum, string name, double initialBalance, string accType) {
+        accounts.emplace_back(accNum, name, initialBalance, accType);
+        cout << "Account created successfully!" << endl;
+    }
+
+    void depositToAccount(int accNum, double amount) {
         Account* account = findAccount(accNum);
-        if(account){
+        if (account) {
             account->deposit(amount);
-        }else{
-            cout<<"Account not found!"<<endl;
+        } else {
+            cout << "Account not found!" << endl;
         }
     }
 
-    void withdrawFromAccount(int accNum, double amount){
+    void withdrawFromAccount(int accNum, double amount) {
         Account* account = findAccount(accNum);
-        if(account){
+        if (account) {
             account->withdraw(amount);
-        }else{
-            cout<<"Account not found!"<<endl;
+        } else {
+            cout << "Account not found!" << endl;
         }
     }
-    void transferMoney(int fromAccNum, int toAccNum, double amount){
+
+    void transferMoney(int fromAccNum, int toAccNum, double amount) {
         Account* fromAccount = findAccount(fromAccNum);
         Account* toAccount = findAccount(toAccNum);
 
-        if(fromAccount && toAccount){
-            if(fromAccount->withdraw(amount)){
+        if (fromAccount && toAccount) {
+            if (fromAccount->withdraw(amount)) {
                 toAccount->deposit(amount);
-                cout<<"Transfer Successfull!"<<endl;
+                cout << "Transfer Successful!" << endl;
             }
-        }else{
-            cout<<"One or both accounts not found!"<<endl;
+        } else {
+            cout << "One or both accounts not found!" << endl;
         }
     }
-    void displayAccountDetails(int accNum){
+
+    void displayAccountDetails(int accNum) {
         Account* account = findAccount(accNum);
-        if(account){
+        if (account) {
             account->displayDetails();
-        }else{
-            cout<<"Account not found!"<<endl;
+        } else {
+            cout << "Account not found!" << endl;
         }
     }
 };
-
 
 int main() {
     Bank bank;
