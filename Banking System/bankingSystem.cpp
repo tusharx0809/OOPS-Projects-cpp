@@ -115,14 +115,15 @@ public:
     ~Bank() {
         saveAccountsToFile(); // Save accounts to file when the bank is destroyed
     }
-
-    void addAccount(int accNum, string name, double initialBalance, string accType) {
+    bool checkAccount(int accNum){
         if(findAccount(accNum) != NULL){
-            cout<<"Account Number already exists! Please try with another account number!"<<endl;
-        }else{
+            return true;
+        }
+        return false;
+    }
+    void addAccount(int accNum, string name, double initialBalance, string accType) {
             accounts.emplace_back(accNum, name, initialBalance, accType);
             cout << "Account created successfully!" << endl;
-        }
     }
 
     void depositToAccount(int accNum, double amount) {
@@ -189,15 +190,20 @@ int main() {
                 double initialBalance;
                 cout << "Enter Account Number: ";
                 cin >> accNum;
-                cout << "Enter Name: ";
-                cin.ignore();
-                getline(cin, name);
-                cout << "Enter Initial Balance: ";
-                cin >> initialBalance;
-                cout << "Enter Account Type (Savings/Current): ";
-                cin >> accType;
-                bank.addAccount(accNum, name, initialBalance, accType);
-                break;
+                if(!bank.checkAccount(accNum)){
+                    cout << "Enter Name: ";
+                    cin.ignore();
+                    getline(cin, name);
+                    cout << "Enter Initial Balance: ";
+                    cin >> initialBalance;
+                    cout << "Enter Account Type (Savings/Current): ";
+                    cin >> accType;
+                    bank.addAccount(accNum, name, initialBalance, accType);
+                    break;
+                }else{
+                    cout<<"Account number already exists! Please try another account number!"<<endl;
+                    break;
+                }        
             }
             case 2: {
                 int accNum;
