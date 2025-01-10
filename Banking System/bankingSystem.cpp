@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include<vector>
 using namespace std;
 
 class Account
@@ -33,8 +34,7 @@ public:
             return false;
         }
         balance -= amount;
-        cout << "Withdrawn: " << amount << ". Remaining Balance: " << balance;
-        << endl;
+        cout << "Withdrawn: " << amount << ". Remaining Balance: " << balance << endl;
         return true;
     }
 
@@ -93,7 +93,7 @@ public:
         }
     }
 
-    void withdrawAmount(int accNum, double amount){
+    void withdrawFromAccount(int accNum, double amount){
         Account* account = findAccount(accNum);
         if(account){
             account->withdraw(amount);
@@ -123,3 +123,86 @@ public:
         }
     }
 };
+
+
+int main() {
+    Bank bank;
+    int choice;
+
+    do {
+        cout << "\n--- Banking System ---\n";
+        cout << "1. Create Account\n";
+        cout << "2. Deposit Money\n";
+        cout << "3. Withdraw Money\n";
+        cout << "4. Transfer Money\n";
+        cout << "5. Display Account Details\n";
+        cout << "6. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                int accNum;
+                string name, accType;
+                double initialBalance;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                cout << "Enter Name: ";
+                cin.ignore();
+                getline(cin, name);
+                cout << "Enter Initial Balance: ";
+                cin >> initialBalance;
+                cout << "Enter Account Type (Savings/Current): ";
+                cin >> accType;
+                bank.addAccount(accNum, name, initialBalance, accType);
+                break;
+            }
+            case 2: {
+                int accNum;
+                double amount;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                cout << "Enter Amount to Deposit: ";
+                cin >> amount;
+                bank.depositToAccount(accNum, amount);
+                break;
+            }
+            case 3: {
+                int accNum;
+                double amount;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                cout << "Enter Amount to Withdraw: ";
+                cin >> amount;
+                bank.withdrawFromAccount(accNum, amount);
+                break;
+            }
+            case 4: {
+                int fromAccNum, toAccNum;
+                double amount;
+                cout << "Enter Your Account Number: ";
+                cin >> fromAccNum;
+                cout << "Enter Receiver's Account Number: ";
+                cin >> toAccNum;
+                cout << "Enter Amount to Transfer: ";
+                cin >> amount;
+                bank.transferMoney(fromAccNum, toAccNum, amount);
+                break;
+            }
+            case 5: {
+                int accNum;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                bank.displayAccountDetails(accNum);
+                break;
+            }
+            case 6:
+                cout << "Exiting... Thank you!\n";
+                break;
+            default:
+                cout << "Invalid choice! Please try again.\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
