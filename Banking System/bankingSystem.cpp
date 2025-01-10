@@ -66,7 +66,7 @@ class Bank
 {
 private:
     vector<Account> accounts;
-    Account *findAccount(int accountNumber)
+    Account* findAccount(int accountNumber)
     {
         for (auto &account : accounts)
         {
@@ -76,5 +76,29 @@ private:
             }
         }
         return NULL;
+    }
+
+public:
+    void addAccount(int accNum, string name, double initialBalance, string accType){
+        accounts.emplace_back(accNum, name, initialBalance, accType); //constucts and Constructs and inserts an element at the end of accounts
+        cout<<"Account created successfully!"<<endl;
+    }
+
+    void depositToAccount(int accNum, double amount){
+        Account* account = findAccount(accNum);
+        if(account){
+            account->deposit(amount);
+        }else{
+            cout<<"Account not found!"<<endl;
+        }
+    }
+
+    void withdrawAmount(int accNum, double amount){
+        Account* account = findAccount(accNum);
+        if(account){
+            account->withdraw(amount);
+        }else{
+            cout<<"Account not found!"<<endl;
+        }
     }
 };
