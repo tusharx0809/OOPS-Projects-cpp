@@ -109,14 +109,15 @@ public:
           monthlyDeposit(deposit),
           duration(durationInMonths),
           interestRate(6.5)
-    {
-    }
+    {};
+
 
     // method to deposity money in recurring from parent
     void depositToRecurring()
     {
         if (parentAcc->withdraw(monthlyDeposit))
         {
+            parentAcc->withdraw(monthlyDeposit);
             deposit(monthlyDeposit);
             cout << "Monthly deposit of " << monthlyDeposit << " made to recurring account from parent account." << endl;
         }
@@ -147,6 +148,10 @@ public:
             cout << "Linked parent account: " << parentAcc->getAccountNumber() << endl;
         }
     }
+    int getRecAccountNumber(){
+        return getAccountNumber();
+    }
+
     string toRecFileString() const
     {
         stringstream ss;
@@ -255,14 +260,7 @@ public:
         loadRecAccountsFile();
     }
 
-    bool checkAccount(int accNum)
-    {
-        if (findAccount(accNum) != NULL)
-        {
-            return true;
-        }
-        return false;
-    }
+    
 
     // Helper method to find an account by number
     Account *findAccount(int accountNumber)
@@ -286,7 +284,7 @@ public:
                 return &recAcc;
             }
         }
-        return nullptr;
+        return NULL;
     }
 
     void addAccount(int accNum, string name, double initialBalance, string accType)
@@ -298,12 +296,14 @@ public:
 
     void addRecAccount(Account *parent, double monthlyDeposit, int duration, double interestRate)
     {
-        int accNum = generateAccountNumber();
+        int accNum = generateRecAccountNumber();
+        cout<<"Your Recurring account number: "<<accNum<<endl;
 
         RecurringDepositAccount newRecAccount(accNum, parent->getName(), monthlyDeposit, monthlyDeposit, duration, parent);
 
         if (parent->withdraw(monthlyDeposit))
         {
+            
             recAccounts.push_back(newRecAccount);
 
             saveRecAccountsfile();
@@ -383,11 +383,20 @@ public:
     int generateAccountNumber()
     {
         int accNum = rand() % 9999999 + 1000000;
-        while (checkAccount(accNum))
+        while (findAccount(accNum) != NULL)
         {
             accNum = rand() % 9999999 + 1000000;
         }
         return accNum;
+    }
+
+    
+    int generateRecAccountNumber(){
+        int recAccNum = rand() % 9999999 + 1000000;
+        while((findAccount(recAccNum) != NULL) && (findRecAccount(recAccNum) != NULL)){
+            recAccNum = rand() % 9999999 + 1000000;
+        }
+        return recAccNum;
     }
 };
 
