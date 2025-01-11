@@ -109,15 +109,19 @@ public:
           monthlyDeposit(deposit),
           duration(durationInMonths),
           interestRate(6.5)
-    {};
-
+    {
+        if (parentAcc == nullptr)
+        {
+            cout << "Error: Parent account is invalid!" << endl;
+            return; // Handle error or throw an exception
+        }
+    };
 
     // method to deposity money in recurring from parent
     void depositToRecurring()
     {
         if (parentAcc->withdraw(monthlyDeposit))
         {
-            parentAcc->withdraw(monthlyDeposit);
             deposit(monthlyDeposit);
             cout << "Monthly deposit of " << monthlyDeposit << " made to recurring account from parent account." << endl;
         }
@@ -148,14 +152,15 @@ public:
             cout << "Linked parent account: " << parentAcc->getAccountNumber() << endl;
         }
     }
-    int getRecAccountNumber(){
+    int getRecAccountNumber()
+    {
         return getAccountNumber();
     }
 
     string toRecFileString() const
     {
         stringstream ss;
-        ss << getAccountNumber() << " " << getName() << " " << getBalance() << " " << monthlyDeposit <<" " << duration <<" "<< getAccountType() <<" "<<parentAcc->getAccountNumber();
+        ss << getAccountNumber() << " " << getName() << " " << getBalance() << " " << monthlyDeposit << " " << duration << " " << getAccountType() << " " << parentAcc->getAccountNumber();
         return ss.str();
     }
 
@@ -260,8 +265,6 @@ public:
         loadRecAccountsFile();
     }
 
-    
-
     // Helper method to find an account by number
     Account *findAccount(int accountNumber)
     {
@@ -297,15 +300,15 @@ public:
     void addRecAccount(Account *parent, double monthlyDeposit, int duration, double interestRate)
     {
         int accNum = generateRecAccountNumber();
-        cout<<"Your Recurring account number: "<<accNum<<endl;
+        cout << "Your Recurring account number: " << accNum << endl;
 
         RecurringDepositAccount newRecAccount(accNum, parent->getName(), monthlyDeposit, monthlyDeposit, duration, parent);
 
         if (parent->withdraw(monthlyDeposit))
         {
-            
-            recAccounts.push_back(newRecAccount);
 
+            recAccounts.push_back(newRecAccount);
+             saveAccountsToFile(); 
             saveRecAccountsfile();
 
             cout << "Recurring Deposit account created successfully!" << endl;
@@ -390,10 +393,11 @@ public:
         return accNum;
     }
 
-    
-    int generateRecAccountNumber(){
+    int generateRecAccountNumber()
+    {
         int recAccNum = rand() % 9999999 + 1000000;
-        while((findAccount(recAccNum) != NULL) && (findRecAccount(recAccNum) != NULL)){
+        while ((findAccount(recAccNum) != NULL) || (findRecAccount(recAccNum) != NULL))
+        {
             recAccNum = rand() % 9999999 + 1000000;
         }
         return recAccNum;
