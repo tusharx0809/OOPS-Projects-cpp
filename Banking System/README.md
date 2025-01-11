@@ -1,4 +1,4 @@
-<h2>This is an Banking System developed using C++ Object Oriented Programming.</h2>
+<h2>This is a Banking System developed using C++ Object Oriented Programming.</h2>
 
 <h4>Features</h4>
 <ul>
