@@ -147,7 +147,42 @@ public:
             cout << "Linked parent account: " << parentAcc->getAccountNumber() << endl;
         }
     }
+    string toRecFileString() const
+    {
+        stringstream ss;
+        ss << getAccountNumber() << " " << getName() << " " << getBalance() << " " << monthlyDeposit <<" " << duration <<" "<< getAccountType() <<" "<<parentAcc->getAccountNumber();
+        return ss.str();
+    }
 
+    static RecurringDepositAccount fromRecFileString(const string &line, const vector<Account *> &allAccounts)
+    {
+        stringstream ss(line);
+        int accNum, dur, parentAccNum;
+        string name, accType;
+        double balance, monthlydep;
+
+        ss >> accNum >> name >> balance >> monthlydep >> dur >> accType >> parentAccNum;
+
+        // Find the parent account from allAccounts
+        Account *parentAcc = nullptr;
+        for (auto *acc : allAccounts)
+        {
+            if (acc->getAccountNumber() == parentAccNum)
+            {
+                parentAcc = acc;
+                break;
+            }
+        }
+
+        // Ensure parentAcc is found, otherwise handle the error (return or throw an exception)
+        if (!parentAcc)
+        {
+            cout << "Parent account not found!" << endl;
+            // Handle the error as needed
+        }
+
+        return RecurringDepositAccount(accNum, name, balance, monthlydep, dur, parentAcc);
+    }
 };
 
 class Bank
@@ -174,13 +209,22 @@ private:
     {
         ifstream file("rec_accounts.txt");
         string line;
+        vector<Account *> accountPointers;
+
+        // Create a vector of Account pointers
+        for (auto &account : accounts)
+        {
+            accountPointers.push_back(&account);
+        }
+
         while (getline(file, line))
         {
             if (!line.empty())
             {
-                recAccounts.push_back(RecurringDepositAccount::fromRecFileString(line));
+                recAccounts.push_back(RecurringDepositAccount::fromRecFileString(line, accountPointers));
             }
         }
+        file.close();
     }
 
     // Helper method to save accounts to the file
