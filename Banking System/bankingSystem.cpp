@@ -85,7 +85,23 @@ public:
     }
 };
 
+class RecurringDepositAccount: public Account{
+    private:
+        Account* parenetAcc;
+        double monthlyDeposit;
+        int duration;
+        double interestRate;
 
+    public:
+        //Constructor
+        RecurringDepositAccount(int accNum, string accName, double initialBalance, double deposit, int durationInMonths, Account* parent)
+        : Account(accNum, accName, initialBalance, "Recurring Deposit"),
+          parentAcc(parent), 
+          monthlyDeposit(deposit), 
+          duration(durationInMonths), 
+          interestRate(6.5) 
+        {}
+};
 
 class Bank
 {
@@ -104,7 +120,7 @@ private:
         }
         return NULL;
     }
-    
+
     // Helper method to load accounts from the file
     void loadAccountsFromFile()
     {
