@@ -297,8 +297,8 @@ int main() {
                 int accNum;
                 string name, accType;
                 double initialBalance;
-                cout << "Enter Account Number: ";
-                cin >> accNum;
+                accNum = bank.generateAccountNumber();
+                cout<<"Your Account number is: "<<accNum<<endl;
                 cout << "Enter Name: ";
                 cin.ignore();
                 getline(cin, name);
