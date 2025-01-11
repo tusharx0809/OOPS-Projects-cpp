@@ -251,6 +251,12 @@ private:
     void saveRecAccountsfile()
     {
         ofstream file("rec_accounts.txt");
+        if (!file.is_open())
+        {
+            cout << "Error: Unable to open rec_accounts.txt for writing!" << endl;
+            return;
+        }
+
         for (const auto &recAcc : recAccounts)
         {
             file << recAcc.toRecFileString() << endl;
@@ -299,24 +305,36 @@ public:
 
     void addRecAccount(Account *parent, double monthlyDeposit, int duration, double interestRate)
     {
+        if (!parent)
+        {
+            cout << "Invalid parent account!" << endl;
+            return;
+        }
+
         int accNum = generateRecAccountNumber();
         cout << "Your Recurring account number: " << accNum << endl;
 
-        RecurringDepositAccount newRecAccount(accNum, parent->getName(), monthlyDeposit, monthlyDeposit, duration, parent);
-
-        if (parent->withdraw(monthlyDeposit))
+        // First check if withdrawal is possible
+        if (!parent->withdraw(monthlyDeposit))
         {
-
-            recAccounts.push_back(newRecAccount);
-             saveAccountsToFile(); 
-            saveRecAccountsfile();
-
-            cout << "Recurring Deposit account created successfully!" << endl;
+            cout << "Insufficient balance in parent account!" << endl;
+            return;
         }
-        else
-        {
-            cout << "Insufficient balance!" << endl;
-        }
+
+        // Create the recurring account with 0 as initial balance
+        RecurringDepositAccount newRecAccount(accNum, parent->getName(), 0, monthlyDeposit, duration, parent);
+
+        // Then deposit the monthly amount
+        newRecAccount.deposit(monthlyDeposit);
+
+        // Add to vector
+        recAccounts.push_back(newRecAccount);
+
+        // Save files
+        saveAccountsToFile();
+        saveRecAccountsfile();
+
+        cout << "Recurring Deposit account created successfully!" << endl;
     }
 
     void depositToAccount(int accNum, double amount)
