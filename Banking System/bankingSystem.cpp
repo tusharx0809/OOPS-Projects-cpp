@@ -36,7 +36,7 @@ public:
             cout << "Insufficient Balance!" << endl;
             return false;
         }
-    
+
         balance -= amount;
         cout << "Withdrawn: " << amount << ". Remaining Balance: " << balance << endl;
         return true;
@@ -55,10 +55,14 @@ public:
         return accountNumber;
     }
 
-    string getName() const {
+    string getName() const
+    {
         return name;
     }
-
+    string getAccountType() const
+    {
+        return accountType;
+    }
     double getBalance() const
     {
         return balance;
@@ -144,23 +148,6 @@ public:
         }
     }
 
-    string toRecFileString() const
-    {
-        stringstream ss;
-        ss << parentAcc->getAccountNumber() << " " << accountNumber <<" "<< balance << " " << monthlyDeposit << " " << interestRate<<" "<<accountType;
-        return ss.str();
-    }
-
-    // Static method to create an Account object from a file line
-    static Account fromRecFileString(const string &line)
-    {
-        stringstream ss(line);
-        int parentAcc, accNum;
-        string name, accType;
-        double balance, monthlydeposit, interestRate;
-        ss >> parentAcc >> accNum >> balance >> monthlyDeposit >> interestRate >> accType;
-        return RecurringDepositAccount(accNum, balance, monthlyDeposit, interestRate, accType, parentAcc);
-    }
 };
 
 class Bank
@@ -168,18 +155,6 @@ class Bank
 private:
     vector<Account> accounts;
     vector<RecurringDepositAccount> recAccounts;
-    // Helper method to find an account by number
-    Account *findAccount(int accountNumber)
-    {
-        for (auto &account : accounts)
-        {
-            if (account.getAccountNumber() == accountNumber)
-            {
-                return &account;
-            }
-        }
-        return NULL;
-    }
 
     // Helper method to load accounts from the file
     void loadAccountsFromFile()
@@ -195,11 +170,14 @@ private:
         }
         file.close();
     }
-    void loadRecAccountsFile(){
+    void loadRecAccountsFile()
+    {
         ifstream file("rec_accounts.txt");
         string line;
-        while(getline(file, line)){
-            if(!line.empty()){
+        while (getline(file, line))
+        {
+            if (!line.empty())
+            {
                 recAccounts.push_back(RecurringDepositAccount::fromRecFileString(line));
             }
         }
@@ -215,11 +193,13 @@ private:
         }
         file.close();
     }
-    
-    void saveRecAccountsfile(){
+
+    void saveRecAccountsfile()
+    {
         ofstream file("rec_accounts.txt");
-        for(const auto &account : accounts){
-            file << Account.toFileString() << endl;
+        for (const auto &recAcc : recAccounts)
+        {
+            file << recAcc.toRecFileString() << endl;
         }
         file.close();
     }
@@ -228,6 +208,7 @@ public:
     Bank()
     {
         loadAccountsFromFile(); // Load accounts from file when the bank is created
+        loadRecAccountsFile();
     }
 
     bool checkAccount(int accNum)
@@ -239,6 +220,31 @@ public:
         return false;
     }
 
+    // Helper method to find an account by number
+    Account *findAccount(int accountNumber)
+    {
+        for (auto &account : accounts)
+        {
+            if (account.getAccountNumber() == accountNumber)
+            {
+                return &account;
+            }
+        }
+        return NULL;
+    }
+
+    RecurringDepositAccount *findRecAccount(int accNum)
+    {
+        for (auto &recAcc : recAccounts)
+        {
+            if (recAcc.getAccountNumber() == accNum)
+            {
+                return &recAcc;
+            }
+        }
+        return nullptr;
+    }
+
     void addAccount(int accNum, string name, double initialBalance, string accType)
     {
         accounts.emplace_back(accNum, name, initialBalance, accType);
@@ -246,18 +252,24 @@ public:
         saveAccountsToFile();
     }
 
-    void addRecAccount(Account* parent, double monthlyDeposit, int duration, double interestRate){
+    void addRecAccount(Account *parent, double monthlyDeposit, int duration, double interestRate)
+    {
         int accNum = generateAccountNumber();
-
-        parent->withdraw(monthlyDeposit);
 
         RecurringDepositAccount newRecAccount(accNum, parent->getName(), monthlyDeposit, monthlyDeposit, duration, parent);
 
-        recAccounts.push_back(newRecAccount);
+        if (parent->withdraw(monthlyDeposit))
+        {
+            recAccounts.push_back(newRecAccount);
 
-        saveRecAccountsfile();
+            saveRecAccountsfile();
 
-        cout<<"Recurring Deposit account created successfully!"<<endl;
+            cout << "Recurring Deposit account created successfully!" << endl;
+        }
+        else
+        {
+            cout << "Insufficient balance!" << endl;
+        }
     }
 
     void depositToAccount(int accNum, double amount)
@@ -348,7 +360,9 @@ int main()
         cout << "3. Withdraw Money\n";
         cout << "4. Transfer Money\n";
         cout << "5. Display Account Details\n";
-        cout << "6. Exit\n";
+        cout << "6. Create Recurring Deposit Account\n";     // Option to create recurring deposit account
+        cout << "7. Deposit Monthly to Recurring Deposit\n"; // Option to deposit to recurring account
+        cout << "8. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
@@ -414,13 +428,52 @@ int main()
             bank.displayAccountDetails(accNum);
             break;
         }
-        case 6:
+        case 6: // Create Recurring Deposit Account
+        {
+            int parentAccNum;
+            double monthlyDeposit;
+            int duration;
+            double interestRate = 6.5; // Assume fixed interest rate
+            cout << "Enter Parent Account Number: ";
+            cin >> parentAccNum;
+
+            Account *parentAccount = bank.findAccount(parentAccNum);
+            if (!parentAccount)
+            {
+                cout << "Parent account not found!" << endl;
+                break;
+            }
+
+            cout << "Enter Monthly Deposit: ";
+            cin >> monthlyDeposit;
+            cout << "Enter Duration (in months): ";
+            cin >> duration;
+
+            bank.addRecAccount(parentAccount, monthlyDeposit, duration, interestRate);
+            break;
+        }
+        case 7: // Deposit Monthly to Recurring Deposit
+        {
+            int recAccNum;
+            cout << "Enter Recurring Deposit Account Number: ";
+            cin >> recAccNum;
+            RecurringDepositAccount *recAcc = bank.findRecAccount(recAccNum);
+            if (!recAcc)
+            {
+                cout << "Recurring Deposit account not found!" << endl;
+                break;
+            }
+
+            recAcc->depositToRecurring();
+            break;
+        }
+        case 8:
             cout << "Exiting... Thank you!\n";
             break;
         default:
             cout << "Invalid choice! Please try again.\n";
         }
-    } while (choice != 6);
+    } while (choice != 8);
 
     return 0;
 }
