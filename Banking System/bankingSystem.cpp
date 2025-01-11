@@ -101,6 +101,35 @@ class RecurringDepositAccount: public Account{
           duration(durationInMonths), 
           interestRate(6.5) 
         {}
+
+        //method to deposity money in recurring from parent
+        void depositToRecurring(){
+            if(parenetAcc->withdraw(monthlyDeposit)){
+                deposit(monthlyDeposit);
+                cout<<"Monthly deposit of "<<monthlyDeposit<<" made to recurring account from parent account."<<endl;
+            }else{
+                cout<<"Insufficient balance!"<<endl;
+            }
+        }
+
+        //Calculate maturity amount
+        double calculateMaturityAmount() const{
+            double totalDeposit = monthlyDeposit * duration;
+            double interest = (totalDeposit * interestRate * duration / 12) / 100;
+            return getBalance() + interest;
+        }
+
+        //Display details
+        void displayRecurringDetails() const {
+            displayDetails();
+            cout<<"Monthly deposit: "<<monthlyDeposit<<endl;
+            cout<<"Duration(months): "<<duration<<endl;
+            cout<<"Interest Rate: "<<interestRate<<endl;
+            cout<<"Maturity Amount: "<<calculateMaturityAmount()<<endl;
+            if(parenetAcc){
+                cout<<"Linked parent account: "<<parenetAcc->getAccountNumber()<<endl;
+            }
+        }
 };
 
 class Bank
