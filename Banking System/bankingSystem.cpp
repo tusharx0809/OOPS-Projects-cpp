@@ -35,7 +35,7 @@ public:
         {
             cout << "Insufficient Balance!" << endl;
             return false;
-        }
+        }https://www.w3schools.com/cpp/cpp_function_param.asp
         balance -= amount;
         cout << "Withdrawn: " << amount << ". Remaining Balance: " << balance << endl;
         return true;
@@ -82,6 +82,49 @@ public:
         ss >> accNum >> name >> balance >> accType;
         return Account(accNum, name, balance, accType);
     }
+};
+
+class RecurringAccount: public Account{
+    private:
+    Account* parentAccount; //pointer to parent account
+    double monthlyDeposit; //Fixed monthly deposit
+    int duration; //duration of the recurring deposit in months
+    double interestRate;
+
+    public:
+    //Constructor
+    RecurringAccount(int accNum, string accName, double initialBalance, double deposit, int durationInMonths, double rate, Account* parent)
+    : Account(accNum, accName, initialBalance, "Recurring Deposit"), 
+      parentAccount(parent), monthlyDeposit(deposit), duration(durationInMonths), interestRate(rate) {}
+
+      //Method to make a monthly deposit from parent account
+      void depositToRecurring(){
+        if(parentAccount->withdraw(monthlyDeposit)){
+            deposit(monthlyDeposit);
+            cout<<"Monthlt deposit of "<<monthlyDeposit <<" made to the recurring account."<<endl;
+        }else{
+            cout<<"Monthlt deposit failed due to insufficient balance."<<endl;
+        }
+      }
+
+      //Calculate maturity amount
+      double calculateMaturityAmount() const {
+        double totalDeposit = monthlyDeposit * duration;
+        double interest = (totalDeposit * interestRate * duration / 12) / 100;
+        return getBalance() + interest;
+      }
+
+      //Display recurring account details
+      void displayRecurringDetails() const {
+        displayDetails();
+        cout<<"Monthly Deposit: "<<monthlyDeposit<<endl;
+        cout<<"Duration(months): "<<duration<<endl;
+        cout<<"Interest rate: "<<interestRate<< "%n";
+        cout<<"Maturity amount: "<<calculateMaturityAmount()<<endl;
+        if(parentAccount){
+            cout<<"Linked parent account number: "<<parentAccount->getAccountNumber() <<endl;
+        }
+      }
 };
 
 class Bank
