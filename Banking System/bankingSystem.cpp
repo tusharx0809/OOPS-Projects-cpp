@@ -87,7 +87,7 @@ public:
 
 class RecurringDepositAccount: public Account{
     private:
-        Account* parenetAcc;
+        Account* parentAcc;
         double monthlyDeposit;
         int duration;
         double interestRate;
@@ -104,7 +104,7 @@ class RecurringDepositAccount: public Account{
 
         //method to deposity money in recurring from parent
         void depositToRecurring(){
-            if(parenetAcc->withdraw(monthlyDeposit)){
+            if(parentAcc->withdraw(monthlyDeposit)){
                 deposit(monthlyDeposit);
                 cout<<"Monthly deposit of "<<monthlyDeposit<<" made to recurring account from parent account."<<endl;
             }else{
@@ -126,8 +126,8 @@ class RecurringDepositAccount: public Account{
             cout<<"Duration(months): "<<duration<<endl;
             cout<<"Interest Rate: "<<interestRate<<endl;
             cout<<"Maturity Amount: "<<calculateMaturityAmount()<<endl;
-            if(parenetAcc){
-                cout<<"Linked parent account: "<<parenetAcc->getAccountNumber()<<endl;
+            if(parentAcc){
+                cout<<"Linked parent account: "<<parentAcc->getAccountNumber()<<endl;
             }
         }
 };
@@ -136,7 +136,7 @@ class Bank
 {
 private:
     vector<Account> accounts;
-
+    vector<RecurringDepositAccount> recAccounts;
     // Helper method to find an account by number
     Account *findAccount(int accountNumber)
     {
@@ -199,6 +199,7 @@ public:
         cout << "Account created successfully!" << endl;
         saveAccountsToFile();
     }
+
 
     void depositToAccount(int accNum, double amount)
     {
