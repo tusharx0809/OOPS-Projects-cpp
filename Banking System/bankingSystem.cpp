@@ -85,51 +85,78 @@ public:
     }
 };
 
-class RecurringDepositAccount: public Account{
-    private:
-        Account* parentAcc;
-        double monthlyDeposit;
-        int duration;
-        double interestRate;
+class RecurringDepositAccount : public Account
+{
+private:
+    Account *parentAcc;
+    double monthlyDeposit;
+    int duration;
+    double interestRate;
 
-    public:
-        //Constructor
-        RecurringDepositAccount(int accNum, string accName, double initialBalance, double deposit, int durationInMonths, Account* parent)
+public:
+    // Constructor
+    RecurringDepositAccount(int accNum, string accName, double initialBalance, double deposit, int durationInMonths, Account *parent)
         : Account(accNum, accName, initialBalance, "Recurring Deposit"),
-          parentAcc(parent), 
-          monthlyDeposit(deposit), 
-          duration(durationInMonths), 
-          interestRate(6.5) 
-        {}
+          parentAcc(parent),
+          monthlyDeposit(deposit),
+          duration(durationInMonths),
+          interestRate(6.5)
+    {
+    }
 
-        //method to deposity money in recurring from parent
-        void depositToRecurring(){
-            if(parentAcc->withdraw(monthlyDeposit)){
-                deposit(monthlyDeposit);
-                cout<<"Monthly deposit of "<<monthlyDeposit<<" made to recurring account from parent account."<<endl;
-            }else{
-                cout<<"Insufficient balance!"<<endl;
-            }
+    // method to deposity money in recurring from parent
+    void depositToRecurring()
+    {
+        if (parentAcc->withdraw(monthlyDeposit))
+        {
+            deposit(monthlyDeposit);
+            cout << "Monthly deposit of " << monthlyDeposit << " made to recurring account from parent account." << endl;
         }
+        else
+        {
+            cout << "Insufficient balance!" << endl;
+        }
+    }
 
-        //Calculate maturity amount
-        double calculateMaturityAmount() const{
-            double totalDeposit = monthlyDeposit * duration;
-            double interest = (totalDeposit * interestRate * duration / 12) / 100;
-            return getBalance() + interest;
-        }
+    // Calculate maturity amount
+    double calculateMaturityAmount() const
+    {
+        double totalDeposit = monthlyDeposit * duration;
+        double interest = (totalDeposit * interestRate * duration / 12) / 100;
+        return getBalance() + interest;
+    }
 
-        //Display details
-        void displayRecurringDetails() const {
-            displayDetails();
-            cout<<"Monthly deposit: "<<monthlyDeposit<<endl;
-            cout<<"Duration(months): "<<duration<<endl;
-            cout<<"Interest Rate: "<<interestRate<<endl;
-            cout<<"Maturity Amount: "<<calculateMaturityAmount()<<endl;
-            if(parentAcc){
-                cout<<"Linked parent account: "<<parentAcc->getAccountNumber()<<endl;
-            }
+    // Display details
+    void displayRecurringDetails() const
+    {
+        displayDetails();
+        cout << "Monthly deposit: " << monthlyDeposit << endl;
+        cout << "Duration(months): " << duration << endl;
+        cout << "Interest Rate: " << interestRate << endl;
+        cout << "Maturity Amount: " << calculateMaturityAmount() << endl;
+        if (parentAcc)
+        {
+            cout << "Linked parent account: " << parentAcc->getAccountNumber() << endl;
         }
+    }
+
+    string toRecFileString() const
+    {
+        stringstream ss;
+        ss << parentAcc->getAccountNumber() << " " << accountNumber <<" "<< balance << " " << monthlyDeposit << " " << interestRate<<" "<<accountType;
+        return ss.str();
+    }
+
+    // Static method to create an Account object from a file line
+    static Account fromRecFileString(const string &line)
+    {
+        stringstream ss(line);
+        int parentAcc, accNum;
+        string name, accType;
+        double balance, monthlydeposit, interestRate;
+        ss >> parentAcc >> accNum >> balance >> monthlyDeposit >> interestRate >> accType;
+        return RecurringDepositAccount(accNum, balance, monthlyDeposit, interestRate, accType, parentAcc);
+    }
 };
 
 class Bank
@@ -164,6 +191,15 @@ private:
         }
         file.close();
     }
+    void loadRecAccountsFile(){
+        ifstream file("rec_accounts.txt");
+        string line;
+        while(getline(file, line)){
+            if(!line.empty()){
+                recAccounts.push_back(RecurringDepositAccount::fromRecFileString(line));
+            }
+        }
+    }
 
     // Helper method to save accounts to the file
     void saveAccountsToFile()
@@ -172,6 +208,14 @@ private:
         for (const auto &account : accounts)
         {
             file << account.toFileString() << endl;
+        }
+        file.close();
+    }
+    
+    void saveRecAccountsfile(){
+        ofstream file("rec_accounts.txt");
+        for(const auto &account : accounts){
+            file << Account.toFileString() << endl;
         }
         file.close();
     }
@@ -191,8 +235,6 @@ public:
         return false;
     }
 
-    
-
     void addAccount(int accNum, string name, double initialBalance, string accType)
     {
         accounts.emplace_back(accNum, name, initialBalance, accType);
@@ -200,6 +242,7 @@ public:
         saveAccountsToFile();
     }
 
+    
 
     void depositToAccount(int accNum, double amount)
     {
@@ -276,12 +319,13 @@ public:
     }
 };
 
-
-int main() {
+int main()
+{
     Bank bank;
     int choice;
 
-    do {
+    do
+    {
         cout << "\n--- Banking System ---\n";
         cout << "1. Create Account\n";
         cout << "2. Deposit Money\n";
@@ -292,67 +336,73 @@ int main() {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice) {
-            case 1: {
-                int accNum;
-                string name, accType;
-                double initialBalance;
-                accNum = bank.generateAccountNumber();
-                cout<<"Your Account number is: "<<accNum<<endl;
-                cout << "Enter Name: ";
-                cin.ignore();
-                getline(cin, name);
-                cout << "Enter Initial Balance: ";
-                cin >> initialBalance;
-                cout << "Enter Account Type (Savings/Current): ";
-                cin >> accType;
-                bank.addAccount(accNum, name, initialBalance, accType);
-                break;
-            }
-            case 2: {
-                int accNum;
-                double amount;
-                cout << "Enter Account Number: ";
-                cin >> accNum;
-                cout << "Enter Amount to Deposit: ";
-                cin >> amount;
-                bank.depositToAccount(accNum, amount);
-                break;
-            }
-            case 3: {
-                int accNum;
-                double amount;
-                cout << "Enter Account Number: ";
-                cin >> accNum;
-                cout << "Enter Amount to Withdraw: ";
-                cin >> amount;
-                bank.withdrawFromAccount(accNum, amount);
-                break;
-            }
-            case 4: {
-                int fromAccNum, toAccNum;
-                double amount;
-                cout << "Enter Your Account Number: ";
-                cin >> fromAccNum;
-                cout << "Enter Receiver's Account Number: ";
-                cin >> toAccNum;
-                cout << "Enter Amount to Transfer: ";
-                cin >> amount;
-                bank.transferMoney(fromAccNum, toAccNum, amount);
-                break;
-            }
-            case 5: {
-                int accNum;
-                cout << "Enter Account Number: ";
-                cin >> accNum;
-                bank.displayAccountDetails(accNum);
-                break;
-            }
-            case 6:
-                cout << "Exiting... Thank you!\n";
-                break;
-            default:
-                cout << "Invalid choice! Please try again.\n";
+        switch (choice)
+        {
+        case 1:
+        {
+            int accNum;
+            string name, accType;
+            double initialBalance;
+            accNum = bank.generateAccountNumber();
+            cout << "Your Account number is: " << accNum << endl;
+            cout << "Enter Name: ";
+            cin.ignore();
+            getline(cin, name);
+            cout << "Enter Initial Balance: ";
+            cin >> initialBalance;
+            cout << "Enter Account Type (Savings/Current): ";
+            cin >> accType;
+            bank.addAccount(accNum, name, initialBalance, accType);
+            break;
+        }
+        case 2:
+        {
+            int accNum;
+            double amount;
+            cout << "Enter Account Number: ";
+            cin >> accNum;
+            cout << "Enter Amount to Deposit: ";
+            cin >> amount;
+            bank.depositToAccount(accNum, amount);
+            break;
+        }
+        case 3:
+        {
+            int accNum;
+            double amount;
+            cout << "Enter Account Number: ";
+            cin >> accNum;
+            cout << "Enter Amount to Withdraw: ";
+            cin >> amount;
+            bank.withdrawFromAccount(accNum, amount);
+            break;
+        }
+        case 4:
+        {
+            int fromAccNum, toAccNum;
+            double amount;
+            cout << "Enter Your Account Number: ";
+            cin >> fromAccNum;
+            cout << "Enter Receiver's Account Number: ";
+            cin >> toAccNum;
+            cout << "Enter Amount to Transfer: ";
+            cin >> amount;
+            bank.transferMoney(fromAccNum, toAccNum, amount);
+            break;
+        }
+        case 5:
+        {
+            int accNum;
+            cout << "Enter Account Number: ";
+            cin >> accNum;
+            bank.displayAccountDetails(accNum);
+            break;
+        }
+        case 6:
+            cout << "Exiting... Thank you!\n";
+            break;
+        default:
+            cout << "Invalid choice! Please try again.\n";
         }
     } while (choice != 6);
 
