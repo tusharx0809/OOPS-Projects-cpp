@@ -36,7 +36,7 @@ public:
             cout << "Insufficient Balance!" << endl;
             return false;
         }
-    https: // www.w3schools.com/cpp/cpp_function_param.asp
+    
         balance -= amount;
         cout << "Withdrawn: " << amount << ". Remaining Balance: " << balance << endl;
         return true;
@@ -53,6 +53,10 @@ public:
     int getAccountNumber() const
     {
         return accountNumber;
+    }
+
+    string getName() const {
+        return name;
     }
 
     double getBalance() const
@@ -242,7 +246,19 @@ public:
         saveAccountsToFile();
     }
 
-    
+    void addRecAccount(Account* parent, double monthlyDeposit, int duration, double interestRate){
+        int accNum = generateAccountNumber();
+
+        parent->withdraw(monthlyDeposit);
+
+        RecurringDepositAccount newRecAccount(accNum, parent->getName(), monthlyDeposit, monthlyDeposit, duration, parent);
+
+        recAccounts.push_back(newRecAccount);
+
+        saveRecAccountsfile();
+
+        cout<<"Recurring Deposit account created successfully!"<<endl;
+    }
 
     void depositToAccount(int accNum, double amount)
     {
