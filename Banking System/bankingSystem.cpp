@@ -35,7 +35,8 @@ public:
         {
             cout << "Insufficient Balance!" << endl;
             return false;
-        }https://www.w3schools.com/cpp/cpp_function_param.asp
+        }
+    https: // www.w3schools.com/cpp/cpp_function_param.asp
         balance -= amount;
         cout << "Withdrawn: " << amount << ". Remaining Balance: " << balance << endl;
         return true;
@@ -84,55 +85,26 @@ public:
     }
 };
 
-class RecurringAccount: public Account{
-    private:
-    Account* parentAccount; //pointer to parent account
-    double monthlyDeposit; //Fixed monthly deposit
-    int duration; //duration of the recurring deposit in months
-    double interestRate;
 
-    public:
-    //Constructor
-    RecurringAccount(int accNum, string accName, double initialBalance, double deposit, int durationInMonths, double rate, Account* parent)
-    : Account(accNum, accName, initialBalance, "Recurring Deposit"), 
-      parentAccount(parent), monthlyDeposit(deposit), duration(durationInMonths), interestRate(rate) {}
-
-      //Method to make a monthly deposit from parent account
-      void depositToRecurring(){
-        if(parentAccount->withdraw(monthlyDeposit)){
-            deposit(monthlyDeposit);
-            cout<<"Monthlt deposit of "<<monthlyDeposit <<" made to the recurring account."<<endl;
-        }else{
-            cout<<"Monthlt deposit failed due to insufficient balance."<<endl;
-        }
-      }
-
-      //Calculate maturity amount
-      double calculateMaturityAmount() const {
-        double totalDeposit = monthlyDeposit * duration;
-        double interest = (totalDeposit * interestRate * duration / 12) / 100;
-        return getBalance() + interest;
-      }
-
-      //Display recurring account details
-      void displayRecurringDetails() const {
-        displayDetails();
-        cout<<"Monthly Deposit: "<<monthlyDeposit<<endl;
-        cout<<"Duration(months): "<<duration<<endl;
-        cout<<"Interest rate: "<<interestRate<< endl;
-        cout<<"Maturity amount: "<<calculateMaturityAmount()<<endl;
-        if(parentAccount){
-            cout<<"Linked parent account number: "<<parentAccount->getAccountNumber() <<endl;
-        }
-      }
-};
 
 class Bank
 {
 private:
     vector<Account> accounts;
 
-
+    // Helper method to find an account by number
+    Account *findAccount(int accountNumber)
+    {
+        for (auto &account : accounts)
+        {
+            if (account.getAccountNumber() == accountNumber)
+            {
+                return &account;
+            }
+        }
+        return NULL;
+    }
+    
     // Helper method to load accounts from the file
     void loadAccountsFromFile()
     {
@@ -174,18 +146,7 @@ public:
         return false;
     }
 
-    // Helper method to find an account by number
-    Account *findAccount(int accountNumber)
-    {
-        for (auto &account : accounts)
-        {
-            if (account.getAccountNumber() == accountNumber)
-            {
-                return &account;
-            }
-        }
-        return NULL;
-    }
+    
 
     void addAccount(int accNum, string name, double initialBalance, string accType)
     {
@@ -269,188 +230,85 @@ public:
     }
 };
 
-int main()
-{
+
+int main() {
     Bank bank;
-    vector<RecurringAccount> recurringAccounts; // List of recurring accounts
     int choice;
 
-    do
-    {
+    do {
         cout << "\n--- Banking System ---\n";
         cout << "1. Create Account\n";
         cout << "2. Deposit Money\n";
         cout << "3. Withdraw Money\n";
         cout << "4. Transfer Money\n";
         cout << "5. Display Account Details\n";
-        cout << "6. Create Recurring Deposit Account\n";
-        cout << "7. Make Monthly Deposit to Recurring Account\n";
-        cout << "8. Display Recurring Account Details\n";
-        cout << "9. Exit\n";
+        cout << "6. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice)
-        {
-        case 1:
-        {
-            int accNum;
-            string name, accType;
-            double initialBalance;
-            accNum = bank.generateAccountNumber();
-            cout << "Your generated account number is: " << accNum << endl;
-            cout << "Enter Your Name: ";
-            cin.ignore();
-            getline(cin, name);
-            cout << "Enter Initial Balance: ";
-            cin >> initialBalance;
-            cout << "Enter Account Type (Savings/Current): ";
-            cin >> accType;
-            bank.addAccount(accNum, name, initialBalance, accType);
-            break;
-        }
-        case 2:
-        {
-            int accNum;
-            double amount;
-            cout << "Enter Account Number: ";
-            cin >> accNum;
-            cout << "Enter Amount to Deposit: ";
-            cin >> amount;
-            bank.depositToAccount(accNum, amount);
-            break;
-        }
-        case 3:
-        {
-            int accNum;
-            double amount;
-            cout << "Enter Account Number: ";
-            cin >> accNum;
-            cout << "Enter Amount to Withdraw: ";
-            cin >> amount;
-            bank.withdrawFromAccount(accNum, amount);
-            break;
-        }
-        case 4:
-        {
-            int fromAccNum, toAccNum;
-            double amount;
-            cout << "Enter Your Account Number: ";
-            cin >> fromAccNum;
-            cout << "Enter Receiver's Account Number: ";
-            cin >> toAccNum;
-            cout << "Enter Amount to Transfer: ";
-            cin >> amount;
-            bank.transferMoney(fromAccNum, toAccNum, amount);
-            break;
-        }
-        case 5:
-        {
-            int accNum;
-            cout << "Enter Account Number: ";
-            cin >> accNum;
-            bank.displayAccountDetails(accNum);
-            break;
-        }
-        case 6: // Create Recurring Deposit Account
-        {
-            int parentAccNum, accNum, duration;
-            string name;
-            double initialBalance, monthlyDeposit, interestRate;
-
-            cout << "Enter Parent Account Number: ";
-            cin >> parentAccNum;
-
-            Account *parentAccount = nullptr;
-            if (bank.checkAccount(parentAccNum))
-            {
-                parentAccount = bank.findAccount(parentAccNum);
-            }
-            else
-            {
-                cout << "Parent account not found! Please try again.\n";
+        switch (choice) {
+            case 1: {
+                int accNum;
+                string name, accType;
+                double initialBalance;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                cout << "Enter Name: ";
+                cin.ignore();
+                getline(cin, name);
+                cout << "Enter Initial Balance: ";
+                cin >> initialBalance;
+                cout << "Enter Account Type (Savings/Current): ";
+                cin >> accType;
+                bank.addAccount(accNum, name, initialBalance, accType);
                 break;
             }
-
-            accNum = bank.generateAccountNumber();
-            cout << "Your Recurring Deposit Account Number is: " << accNum << endl;
-
-            cout << "Enter Your Name: ";
-            cin.ignore();
-            getline(cin, name);
-
-            cout << "Enter Initial Balance: ";
-            cin >> initialBalance;
-
-            cout << "Enter Monthly Deposit Amount: ";
-            cin >> monthlyDeposit;
-
-            cout << "Enter Duration (in months): ";
-            cin >> duration;
-
-            cout << "Enter Annual Interest Rate (in %): ";
-            cin >> interestRate;
-
-            RecurringAccount newRecurringAccount(accNum, name, initialBalance, monthlyDeposit, duration, interestRate, parentAccount);
-            recurringAccounts.push_back(newRecurringAccount);
-
-            cout << "Recurring Deposit Account Created Successfully!\n";
-            break;
-        }
-        case 7: // Make Monthly Deposit to Recurring Account
-        {
-            int accNum;
-            cout << "Enter Recurring Account Number: ";
-            cin >> accNum;
-
-            bool found = false;
-            for (auto &recurringAccount : recurringAccounts)
-            {
-                if (recurringAccount.getAccountNumber() == accNum)
-                {
-                    recurringAccount.depositToRecurring();
-                    found = true;
-                    break;
-                }
+            case 2: {
+                int accNum;
+                double amount;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                cout << "Enter Amount to Deposit: ";
+                cin >> amount;
+                bank.depositToAccount(accNum, amount);
+                break;
             }
-
-            if (!found)
-            {
-                cout << "Recurring account not found!\n";
+            case 3: {
+                int accNum;
+                double amount;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                cout << "Enter Amount to Withdraw: ";
+                cin >> amount;
+                bank.withdrawFromAccount(accNum, amount);
+                break;
             }
-            break;
-        }
-        case 8: // Display Recurring Account Details
-        {
-            int accNum;
-            cout << "Enter Recurring Account Number: ";
-            cin >> accNum;
-
-            bool found = false;
-            for (const auto &recurringAccount : recurringAccounts)
-            {
-                if (recurringAccount.getAccountNumber() == accNum)
-                {
-                    recurringAccount.displayRecurringDetails();
-                    found = true;
-                    break;
-                }
+            case 4: {
+                int fromAccNum, toAccNum;
+                double amount;
+                cout << "Enter Your Account Number: ";
+                cin >> fromAccNum;
+                cout << "Enter Receiver's Account Number: ";
+                cin >> toAccNum;
+                cout << "Enter Amount to Transfer: ";
+                cin >> amount;
+                bank.transferMoney(fromAccNum, toAccNum, amount);
+                break;
             }
-
-            if (!found)
-            {
-                cout << "Recurring account not found!\n";
+            case 5: {
+                int accNum;
+                cout << "Enter Account Number: ";
+                cin >> accNum;
+                bank.displayAccountDetails(accNum);
+                break;
             }
-            break;
+            case 6:
+                cout << "Exiting... Thank you!\n";
+                break;
+            default:
+                cout << "Invalid choice! Please try again.\n";
         }
-        case 9:
-            cout << "Exiting... Thank you!\n";
-            break;
-        default:
-            cout << "Invalid choice! Please try again.\n";
-        }
-    } while (choice != 9);
+    } while (choice != 6);
 
     return 0;
 }
-
