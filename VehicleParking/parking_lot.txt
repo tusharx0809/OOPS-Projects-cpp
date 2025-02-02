@@ -1,0 +1,12 @@
+Floor 0:
+  Spot 0: Vehicle XYZ789 entered at 2-2-2025,11:43
+  Spot 1: Vehicle LMN234 entered at 2-2-2025,11:43
+  Spot 2: Vehicle GHI567 entered at 2-2-2025,11:43
+  Spot 3: Vehicle JKL890 entered at 2-2-2025,11:43
+  Spot 4: Vehicle PQR345 entered at 2-2-2025,11:43
+Floor 1:
+  Spot 0: Vehicle STU678 entered at 2-2-2025,11:43
+  Spot 1: Empty
+  Spot 2: Empty
+  Spot 3: Empty
+  Spot 4: Empty

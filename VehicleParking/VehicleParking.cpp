@@ -156,23 +156,74 @@ public:
             }
         }
     }
+
+    void saveParkingLotToFile(const string &filename){
+        ofstream file(filename);
+
+        if(!file.is_open()){
+            cout<<"Error Opening File!"<<endl;
+            return;
+        }
+
+        for(int i=0;i<floors;i++){
+            file << "Floor "<<i<<":"<<endl;
+            for(int j=0;j<numberOfParking;j++){
+                file<<"  Spot "<<j<<": ";
+                if(parkingLot[i][j].first == ""){
+                    file<<"Empty"<<endl;
+                }else{
+                    file<<"Vehicle "<<parkingLot[i][j].first <<" entered at "<<parkingLot[i][j].second << endl;
+                }
+            }
+        }
+        file.close();
+        cout<<"Parking Lot Saved to "<<filename<<endl;
+    }
+    
+    void loadParkingLotFromFile(const string &filename){
+        ifstream file(filename);
+
+        if(!file.is_open()){
+            cout<<"Error Opening File!"<<endl;
+            return;
+        }
+
+        string line;
+        int floor = -1;
+        int spot = -1;
+
+        while(getline(file, line)){
+            if(line.find("Floor") != string::npos){
+                floor++;
+                spot = -1;
+            }else if(line.find("Spot") != string::npos){
+                spot++;
+                size_t pos = line.find("Vehicle");
+                if(pos != string::npos){
+                    size_t time_pos = line.find(" entered at ");
+                    string licensePlate = line.substr(pos+8, time_pos - (pos+8));
+                    string time = line.substr(time_pos + 12);
+
+                    parkingLot[floor][spot] = {licensePlate, time};
+                }else{
+                    parkingLot[floor][spot] = {"",""};
+                }
+            }
+        }
+        file.close();
+        cout<<"Parking lot loaded from "<<filename<<endl;
+    }
 };
 
 int main()
 {
-    Parking parking(2, 2); // 2 floors, 3 parking spots per floor
+    Parking parking(2, 5); // 2 floors, 3 parking spots per floor
 
     // Vehicle will be parked wherever it finds the first empty spot parking
 
-    parking.parkVehicle("ABC123");
-    parking.parkVehicle("DEF456");
-    parking.parkVehicle("QWE345");
-    parking.parkVehicle("QWT345");
-    parking.removeVehicle("DEF456");
-    parking.parkVehicle("ERT456");
+    parking.loadParkingLotFromFile("parking_lot.txt");
     parking.displayParkingLot();
-
-    parking.removeVehicle("ABC123");
+    parking.saveParkingLotToFile("parking_lot.txt");
 
     return 0;
 }
