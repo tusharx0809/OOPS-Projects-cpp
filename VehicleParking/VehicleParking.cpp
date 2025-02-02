@@ -90,7 +90,9 @@ public:
             {
                 string parkingDateTime = getCurrentDateTime();
                 parkingLot[floor][spot] = {licensePlate, parkingDateTime};
+                saveParkingLotToFile("parking_lot.txt");
                 cout << "Car Parked at floor:" << floor << " and spot: " << spot << endl;
+                displayParkingLot();
                 return true;
             }
             spot++;
@@ -102,6 +104,7 @@ public:
         }
 
         cout << "Parking Full!" << endl;
+        displayParkingLot();
         return false;
     }
 
@@ -121,6 +124,8 @@ public:
 
                 parkingLot[floor][spot] = {"", ""};
                 cout << "Car: " << licensePlate << " exited from floor:" << floor << " and spot: " << spot <<" at: "<<exitDateTime<<" Charges: "<< charges << endl;
+                saveParkingLotToFile("parking_lot.txt");
+                displayParkingLot();
                 return true;
             }
             spot++;
@@ -132,6 +137,7 @@ public:
         }
 
         cout << "Car Not Found!" << endl;
+        displayParkingLot();
         return false;
     }
 
@@ -222,7 +228,9 @@ int main()
     Parking parking(2, 5); 
 
     // Vehicle will be parked wherever it finds the first empty spot parking
-    parking.displayParkingLot();
+    
+    parking.removeVehicle("ABC123");
+
     
     return 0;
 }
