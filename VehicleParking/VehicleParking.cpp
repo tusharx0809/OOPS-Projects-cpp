@@ -28,26 +28,50 @@ public:
     {
         parkingLot.resize(floors, vector<pair<string, string>>(numberOfParking, {"", ""}));
     }
+    string getCurrentDateTime()
+    {
+        time_t timestamp;
+        time(&timestamp);
 
-    bool parkVehicle(const string &licensePlate, const string &time)
+        // Convert the timestamp to local time
+        struct tm *local_time = localtime(&timestamp);
+
+        // Extract and print date and time
+        int year = local_time->tm_year + 1900; // tm_year is years since 1900
+        int month = local_time->tm_mon + 1;    // tm_mon is 0-11
+        int day = local_time->tm_mday;         // tm_mday is day of the month (1-31)
+        int hour = local_time->tm_hour;        // tm_hour is hour (0-23)
+        int minute = local_time->tm_min;       // tm_min is minute (0-59)
+        int second = local_time->tm_sec;       // tm_sec is second (0-59)
+
+        string dateTime = to_string(month) + "-" + to_string(day) + "-" + to_string(year) + "," + to_string(hour) + ":" + to_string(minute);
+
+        return dateTime;
+    }
+
+    bool parkVehicle(const string &licensePlate)
     {
         int spot = 0;
         int floor = 0;
 
-        while(floor < floors){
-            if(parkingLot[floor][spot].first == ""){
-                parkingLot[floor][spot] = {licensePlate, time};
-                cout<<"Car Parked at floor:"<<floor<<" and spot: "<<spot<<endl;
+        while (floor < floors)
+        {
+            if (parkingLot[floor][spot].first == "")
+            {
+                string currentDateTime = getCurrentDateTime();
+                parkingLot[floor][spot] = {licensePlate, currentDateTime};
+                cout << "Car Parked at floor:" << floor << " and spot: " << spot << endl;
                 return true;
             }
             spot++;
-            if(spot == numberOfParking){
+            if (spot == numberOfParking)
+            {
                 floor++;
                 spot = 0;
             }
         }
 
-        cout<<"Parking Full!"<<endl;
+        cout << "Parking Full!" << endl;
         return false;
     }
 
@@ -67,6 +91,7 @@ public:
         cout << "Vehicle removed successfully from floor " << floor << ", spot " << spot << "." << endl;
         return true;
     }
+
 
     // Function to display the parking lot status
     void displayParkingLot()
@@ -95,14 +120,14 @@ int main()
 {
     Parking parking(2, 2); // 2 floors, 3 parking spots per floor
 
-    //Vehicle will be parked wherever it finds the first empty spot parking
+    // Vehicle will be parked wherever it finds the first empty spot parking
 
-    parking.parkVehicle("ABC123", "10:00AM");
-    parking.parkVehicle("DEF456", "11:30AM");
-    parking.parkVehicle("QWE345","12:00PM");
-    parking.parkVehicle("QWT345","12:30PM");
-    parking.removeVehicle(0,1);
-    parking.parkVehicle("ERT456","1:00PM");
+    parking.parkVehicle("ABC123");
+    parking.parkVehicle("DEF456");
+    parking.parkVehicle("QWE345");
+    parking.parkVehicle("QWT345");
+    parking.removeVehicle(0, 1);
+    parking.parkVehicle("ERT456");
     parking.displayParkingLot();
 
     return 0;
