@@ -7,6 +7,6 @@ Floor 0:
 Floor 1:
   Spot 0: Vehicle LIN234 entered at 2-2-2025,12:33
   Spot 1: Vehicle PMN234 entered at 2-2-2025,12:33
-  Spot 2: Vehicle LMN234 entered at 2-2-2025,12:34
-  Spot 3: Vehicle LMA234 entered at 2-2-2025,12:34
-  Spot 4: Vehicle AMN234 entered at 2-2-2025,12:34
+  Spot 2: Empty
+  Spot 3: Empty
+  Spot 4: Empty
