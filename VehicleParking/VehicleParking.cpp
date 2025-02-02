@@ -27,6 +27,7 @@ public:
     Parking(int floors, int numberOfParking) : floors(floors), numberOfParking(numberOfParking)
     {
         parkingLot.resize(floors, vector<pair<string, string>>(numberOfParking, {"", ""}));
+        loadParkingLotFromFile("parking_lot.txt");
     }
 
     //function to get currentDateTime
@@ -221,7 +222,6 @@ int main()
     Parking parking(2, 5); 
 
     // Vehicle will be parked wherever it finds the first empty spot parking
-    parking.loadParkingLotFromFile("parking_lot.txt");
     parking.displayParkingLot();
     
     return 0;
