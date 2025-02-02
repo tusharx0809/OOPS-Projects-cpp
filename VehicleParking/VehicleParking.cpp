@@ -119,13 +119,14 @@ public:
             if (parkingLot[floor][spot].first == licensePlate)
             {
                 string exitDateTime = getCurrentDateTime();
-
-                double charges = calculateParkingCharges(getParkingTime(exitDateTime, parkingLot[floor][spot].second));
+                long int totalParkingTime = getParkingTime(exitDateTime, parkingLot[floor][spot].second);
+                double charges = calculateParkingCharges(totalParkingTime);
 
                 parkingLot[floor][spot] = {"", ""};
                 cout << "Car: " << licensePlate << " exited from floor:" << floor << " and spot: " << spot <<" at: "<<exitDateTime<<" Charges: "<< charges << endl;
                 saveParkingLotToFile("parking_lot.txt");
                 displayParkingLot();
+                logChargesToFile(licensePlate, exitDateTime, totalParkingTime, charges,"charges.txt");
                 return true;
             }
             spot++;
@@ -164,6 +165,17 @@ public:
         }
     }
 
+    void logChargesToFile(const string & licensePlate,const string &exitDateTime, long int duration, double charges, const string &filename){
+        ofstream file(filename, ios::app);
+
+        if(!file.is_open()){
+            cout<<"Error opening file!"<<endl;
+            return;
+        }
+        file<<licensePlate<<" "<<exitDateTime<<" "<<duration<<" "<<charges<<endl;
+        file.close(); 
+    }
+
     void saveParkingLotToFile(const string &filename){
         ofstream file(filename);
 
@@ -186,6 +198,7 @@ public:
         file.close();
         cout<<"Parking Lot Saved to "<<filename<<endl;
     }
+
     
     void loadParkingLotFromFile(const string &filename){
         ifstream file(filename);
@@ -228,9 +241,9 @@ int main()
     Parking parking(2, 5); 
 
     // Vehicle will be parked wherever it finds the first empty spot parking
-    
-    parking.removeVehicle("ABC123");
-
+    parking.removeVehicle("PMN234");
+    parking.removeVehicle("ABCD1234");
+    parking.removeVehicle("LIN234");
     
     return 0;
 }

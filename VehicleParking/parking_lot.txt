@@ -1,12 +1,12 @@
 Floor 0:
   Spot 0: Empty
-  Spot 1: Empty
-  Spot 2: Vehicle AMN234 entered at 2-2-2025,12:33
+  Spot 1: Vehicle ASDF1234 entered at 2-2-2025,17:29
+  Spot 2: Vehicle QWER1234 entered at 2-2-2025,17:29
   Spot 3: Empty
-  Spot 4: Vehicle LPN234 entered at 2-2-2025,12:33
+  Spot 4: Empty
 Floor 1:
-  Spot 0: Vehicle LIN234 entered at 2-2-2025,12:33
-  Spot 1: Vehicle PMN234 entered at 2-2-2025,12:33
+  Spot 0: Empty
+  Spot 1: Empty
   Spot 2: Empty
   Spot 3: Empty
   Spot 4: Empty
