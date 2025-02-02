@@ -28,6 +28,7 @@ public:
     {
         parkingLot.resize(floors, vector<pair<string, string>>(numberOfParking, {"", ""}));
     }
+
     string getCurrentDateTime()
     {
         time_t timestamp;
@@ -49,6 +50,10 @@ public:
         return dateTime;
     }
 
+    double calculateParkingCharges(double minutes){
+        return minutes * 0.15;
+    }
+
     bool parkVehicle(const string &licensePlate)
     {
         int spot = 0;
@@ -58,8 +63,8 @@ public:
         {
             if (parkingLot[floor][spot].first == "")
             {
-                string currentDateTime = getCurrentDateTime();
-                parkingLot[floor][spot] = {licensePlate, currentDateTime};
+                string parkingDateTime = getCurrentDateTime();
+                parkingLot[floor][spot] = {licensePlate, parkingDateTime};
                 cout << "Car Parked at floor:" << floor << " and spot: " << spot << endl;
                 return true;
             }
@@ -75,21 +80,31 @@ public:
         return false;
     }
 
-    bool removeVehicle(int floor, int spot)
+    bool removeVehicle(const string &licensePlate)
     {
-        if (floor < 0 || floor >= floors || spot < 0 || spot >= numberOfParking)
+        int spot = 0;
+        int floor = 0;
+
+        while (floor < floors)
         {
-            cout << "Invalid floor or spot number." << endl;
-            return false;
+            if (parkingLot[floor][spot].first == licensePlate)
+            {
+                string exitDateTime = getCurrentDateTime();
+
+                parkingLot[floor][spot] = {"", ""};
+                cout << "Car: " << licensePlate << " exited from floor:" << floor << " and spot: " << spot <<" at: "<<exitDateTime<< endl;
+                return true;
+            }
+            spot++;
+            if (spot == numberOfParking)
+            {
+                floor++;
+                spot = 0;
+            }
         }
-        if (parkingLot[floor][spot].first == "")
-        {
-            cout << "Parking spot is already empty." << endl;
-            return false;
-        }
-        parkingLot[floor][spot] = {"", ""};
-        cout << "Vehicle removed successfully from floor " << floor << ", spot " << spot << "." << endl;
-        return true;
+
+        cout << "Car Not Found!" << endl;
+        return false;
     }
 
 
@@ -126,7 +141,7 @@ int main()
     parking.parkVehicle("DEF456");
     parking.parkVehicle("QWE345");
     parking.parkVehicle("QWT345");
-    parking.removeVehicle(0, 1);
+    parking.removeVehicle("DEF456");
     parking.parkVehicle("ERT456");
     parking.displayParkingLot();
 
