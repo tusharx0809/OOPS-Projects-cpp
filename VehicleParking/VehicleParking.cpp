@@ -201,7 +201,7 @@ public:
         cout<<"Parking Lot Saved to "<<filename<<endl;
     }
 
-    //Function to load the parkit lot txt file when main function is executed
+    //Function to load the parking lot txt file when main function is executed
     void loadParkingLotFromFile(const string &filename){
         ifstream file(filename);
 
