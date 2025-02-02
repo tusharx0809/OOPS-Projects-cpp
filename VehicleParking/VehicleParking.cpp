@@ -223,8 +223,15 @@ int main()
 
     parking.loadParkingLotFromFile("parking_lot.txt");
     parking.displayParkingLot();
-    parking.removeVehicle("LMN234");
+    parking.parkVehicle("LMN234");
+    parking.parkVehicle("LMA234");
+    parking.parkVehicle("AMN234");
+    parking.parkVehicle("LLN234");
+    parking.parkVehicle("LPN234");
+    parking.parkVehicle("LIN234");
+    parking.parkVehicle("PMN234");
     parking.displayParkingLot();
+    parking.removeVehicle("LMN234");
     parking.saveParkingLotToFile("parking_lot.txt");
 
     return 0;
