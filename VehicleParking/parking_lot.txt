@@ -1,7 +1,7 @@
 Floor 0:
-  Spot 0: Empty
-  Spot 1: Vehicle ASDF1234 entered at 2-2-2025,17:29
-  Spot 2: Vehicle QWER1234 entered at 2-2-2025,17:29
+  Spot 0: Vehicle ABC123 type Bike entered at 2-2-2025,19:20
+  Spot 1: Vehicle DEF234 type Car entered at 2-2-2025,19:20
+  Spot 2: Empty
   Spot 3: Empty
   Spot 4: Empty
 Floor 1:
