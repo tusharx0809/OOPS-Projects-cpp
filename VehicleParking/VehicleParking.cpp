@@ -45,12 +45,34 @@ public:
         int minute = local_time->tm_min;       // tm_min is minute (0-59)
         int second = local_time->tm_sec;       // tm_sec is second (0-59)
 
-        string dateTime = to_string(month) + "-" + to_string(day) + "-" + to_string(year) + "," + to_string(hour) + ":" + to_string(minute);
+        string dateTime = to_string(month) + "-" + to_string(day) + "-" + to_string(year) + "," +
+                      (hour < 10 ? "0" + to_string(hour) : to_string(hour)) + ":" +
+                      (minute < 10 ? "0" + to_string(minute) : to_string(minute));
 
         return dateTime;
     }
 
-    double calculateParkingCharges(double minutes){
+    long int getParkingTime(const string &parkingDateTime,const string &exitDateTime){
+        string format = "%m-%d-%Y,%H:%M";
+
+        tm tm1 = {};
+        tm tm2 = {};
+
+        istringstream ss1(exitDateTime);
+        ss1 >> get_time(&tm1, format.c_str());
+
+        istringstream ss2(parkingDateTime);
+        ss2 >> get_time(&tm2, format.c_str());
+
+        auto tp1 = chrono::system_clock::from_time_t(mktime(&tm1));
+        auto tp2 = chrono::system_clock::from_time_t(mktime(&tm2));
+
+        long int parkingTime = chrono::duration_cast<chrono::minutes>(tp2 - tp1).count();
+
+        return parkingTime;
+    }
+
+    double calculateParkingCharges(int minutes){
         return minutes * 0.15;
     }
 
@@ -91,8 +113,10 @@ public:
             {
                 string exitDateTime = getCurrentDateTime();
 
+                double charges = calculateParkingCharges(getParkingTime(exitDateTime, parkingLot[floor][spot].second));
+
                 parkingLot[floor][spot] = {"", ""};
-                cout << "Car: " << licensePlate << " exited from floor:" << floor << " and spot: " << spot <<" at: "<<exitDateTime<< endl;
+                cout << "Car: " << licensePlate << " exited from floor:" << floor << " and spot: " << spot <<" at: "<<exitDateTime<<" Charges: "<< charges << endl;
                 return true;
             }
             spot++;
@@ -144,6 +168,8 @@ int main()
     parking.removeVehicle("DEF456");
     parking.parkVehicle("ERT456");
     parking.displayParkingLot();
+
+    parking.removeVehicle("ABC123");
 
     return 0;
 }
