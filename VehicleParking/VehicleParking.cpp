@@ -6,7 +6,7 @@ class Parking
 private:
     int floors;                                      // number of floors in multistorey parking
     int numberOfParking;                             // number of parkings on one storey
-    vector<vector<pair<string, string>>> parkingLot; // 2d vector which represents multistorey parking, internal unordered map represents parking number and its value representing a vector with license plate and time entered in parking
+    vector<vector<pair<string, string>>> parkingLot; // 2d vector which represents multistorey parking, pair represents license plate and time at which the customer parked the vehicle
 
     /*  Structure of parking lot
         parkingLot = {
@@ -29,15 +29,14 @@ public:
         parkingLot.resize(floors, vector<pair<string, string>>(numberOfParking, {"", ""}));
     }
 
+    //function to get currentDateTime
     string getCurrentDateTime()
     {
         time_t timestamp;
         time(&timestamp);
-
-        // Convert the timestamp to local time
+        
         struct tm *local_time = localtime(&timestamp);
 
-        // Extract and print date and time
         int year = local_time->tm_year + 1900; // tm_year is years since 1900
         int month = local_time->tm_mon + 1;    // tm_mon is 0-11
         int day = local_time->tm_mday;         // tm_mday is day of the month (1-31)
@@ -52,6 +51,7 @@ public:
         return dateTime;
     }
 
+    //function to get the parking duration of a vehicle
     long int getParkingTime(const string &parkingDateTime,const string &exitDateTime){
         string format = "%m-%d-%Y,%H:%M";
 
@@ -72,10 +72,12 @@ public:
         return parkingTime;
     }
 
+    //Function to calculae parking charges per minute
     double calculateParkingCharges(int minutes){
         return minutes * 0.15;
     }
 
+    //Function to add a vehicle at first empty parking spot
     bool parkVehicle(const string &licensePlate)
     {
         int spot = 0;
@@ -102,6 +104,7 @@ public:
         return false;
     }
 
+    //Function to remove Vehicle from parking
     bool removeVehicle(const string &licensePlate)
     {
         int spot = 0;
