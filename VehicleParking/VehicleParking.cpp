@@ -95,6 +95,8 @@ int main()
 {
     Parking parking(2, 2); // 2 floors, 3 parking spots per floor
 
+    //Vehicle will be parked wherever it finds the first empty spot parking
+
     parking.parkVehicle("ABC123", "10:00AM");
     parking.parkVehicle("DEF456", "11:30AM");
     parking.parkVehicle("QWE345","12:00PM");
