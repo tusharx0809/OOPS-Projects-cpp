@@ -263,7 +263,7 @@ int main()
     Parking parking(2, 5);
 
     // Park some vehicles
-    parking.parkVehicle("DEF234","Car");
+    parking.removeVehicle("ABC123");
 
     // Vehicle will be removed
 
