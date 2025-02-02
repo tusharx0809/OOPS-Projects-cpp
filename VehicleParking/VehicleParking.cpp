@@ -165,6 +165,7 @@ public:
         }
     }
 
+    //Function to log charges info in txt file when vehicle exits from parking
     void logChargesToFile(const string & licensePlate,const string &exitDateTime, long int duration, double charges, const string &filename){
         ofstream file(filename, ios::app);
 
@@ -176,6 +177,7 @@ public:
         file.close(); 
     }
 
+    //Function to save vehicle info in txt file when vehicle is entered into the parking lot
     void saveParkingLotToFile(const string &filename){
         ofstream file(filename);
 
@@ -199,7 +201,7 @@ public:
         cout<<"Parking Lot Saved to "<<filename<<endl;
     }
 
-    
+    //Function to load the parkit lot txt file when main function is executed
     void loadParkingLotFromFile(const string &filename){
         ifstream file(filename);
 
