@@ -1,12 +1,14 @@
 Floor 0:
-  Spot 0: Empty
-  Spot 1: Vehicle DEF234 type Car entered at 2-2-2025,19:20
+  Spot 0: Vehicle ABC123 type Car entered at 2-3-2025,12:11
+  Spot 1: Vehicle GHJ123 type Car entered at 2-3-2025,12:15
   Spot 2: Empty
-  Spot 3: Empty
-  Spot 4: Empty
+  Spot 3: Vehicle IOP098 type Bike entered at 2-3-2025,12:16
+  Spot 4: Vehicle BNM123 type Car entered at 2-3-2025,12:11
+  Spot 5: Vehicle UIO098 type Car entered at 2-3-2025,12:16
 Floor 1:
   Spot 0: Empty
   Spot 1: Empty
   Spot 2: Empty
   Spot 3: Empty
   Spot 4: Empty
+  Spot 5: Empty
