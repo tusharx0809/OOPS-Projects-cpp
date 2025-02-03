@@ -44,3 +44,12 @@
         </ul>
     </li>
 </ul>
+
+<h3>Concepts Applied</h3>
+    <ul>
+        <li>Object Oriented Approach</li>
+        <li>Inheritance of clases, encapsualtion, polymorphism</li>
+        <li>C++ files reading</li>
+        <li>C++ Datetime</li>
+        <li>Pointers</li>
+    </ul>
