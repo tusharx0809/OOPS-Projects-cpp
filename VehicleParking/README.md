@@ -19,7 +19,7 @@
             <li><strong>bool removeVehicle():</strong> Takes the string licensePlate as argument and removes the car and log charges to file/.</li>           
             <li><strong>void displayParkingLot():</strong> Displays the parking Lot.</li>
             <li><strong>void logChargesToFile():</strong> Takes five arguments: License plate, exit date time, duration, charges and filename in which the charges are stored.</li>
-            <li><strong>void saveParkingToFile:</strong> Takes one argument as filename in which the parking lot is stored.</li>
+            <li><strong>void saveParkingToFile():</strong> Takes one argument as filename in which the parking lot is stored.</li>
             <li><strong>void loadParkingLotFromFile(): Takes one argument from which the parking lot is loaded.</strong></li>
         </ul>
     </li>
