@@ -11,7 +11,7 @@
 <h3>Classes</h3>
 <ul>
     <li>
-        <h4>Parking Class and its functions</h4>
+        Parking Class and its functions
         <ul>
             <li><strong>string getCurrentDateTime():</strong> Returns string of current date time in format "MM-DD-YYYY, HH:MM"</li>
             <li><strong>long int getParkingTime():</strong> Takes two arguments as entry time and exit time and returns the differnce in minutes.</li>
@@ -23,6 +23,13 @@
             <li><strong>void loadParkingLotFromFile(): Takes one argument from which the parking lot is loaded.</strong></li>
         </ul>
     </li>
-    <li>Inherited class for car and bikes/scooters.</li>
+    <li>
+        Vehicle Class
+        <ul>
+            <li><strong>virtual double getChargesPerMinute()</strong>: Virtual function to calculate charges to be overriden in inherited classes of Car and Bike.</li>
+            <li><strong>string getLicensePlate()</strong>: Returns the license plate of vehicle.</li>
+            <li><strong>string getEntryTime()</strong>: Returns entry time of Vehicle</li>
+        </ul>
+    </li>
     <li>Different parking charges for cars and bikes.</li>
 </ul>
