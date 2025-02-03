@@ -1,5 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
+
+
+
 // ------------------------- VEHICLE CLASS -------------------------- //
 
 class Vehicle
@@ -21,6 +24,9 @@ public:
 };
 
 
+
+
+
 // ------------------------- CAR CLASS -------------------------- //
 
 class Car : public Vehicle{
@@ -32,6 +38,9 @@ class Car : public Vehicle{
     }
 };
 
+
+
+
 // ------------------------- BIKE CLASS -------------------------- //
 
 class Bike : public Vehicle{
@@ -42,6 +51,9 @@ class Bike : public Vehicle{
         return 0.1;
     }
 };
+
+
+
 
 // ------------------------- PARKING CLASS -------------------------- //
 class Parking
@@ -270,6 +282,10 @@ public:
     }
 
 };
+
+
+
+
 // ------------------------- MAIN FUNCTION -------------------------- //
 int main()
 {
