@@ -5,14 +5,43 @@ using namespace std;
 class Vehicle
 {
 protected:
-    
+    string licensePlate;
+    string entryTime;
+
+public:
+    Vehicle(string licencePlate, string entryTime) : {
+        licensePlate(licensePlate);
+        entryTime(entryTime);
+    }
+
+    virtual ~Vehicle() {}
+
+    virtual double getChargesPerMinute() const = 0;
+
+    string getLicensePlate() const { return licensePlate };
+    string getEntryTime() const { return entryTime };
 };
 
 
 // ------------------------- CAR CLASS -------------------------- //
 
+class Car : public Vehicle{
+    Car(string licensePlate, string entryTime) : Vehicle(licensePlate, entryTime) {}
+
+    double getChargesPerMinute() const override {
+        return 0.2;
+    }
+};
 
 // ------------------------- BIKE CLASS -------------------------- //
+
+class Bike : public Vehicle{
+    Bike(string licensePlate, string entryTime) : Vehicle(licensePlate, entryTime) {}
+
+    double getChargesPerMinute() const override {
+        return 0.1;
+    }
+};
 
 // ------------------------- PARKING CLASS -------------------------- //
 class Parking
@@ -20,7 +49,7 @@ class Parking
 private:
     int floors;                                               // number of floors in multistorey parking
     int numberOfParking;                                      // number of parkings on one storey
-    vector<vector<tuple<string, string, string>>> parkingLot; // 2d vector which represents multistorey parking, tuple represents license plate and time at which the customer parked the vehicle
+    vector<vector<Vehicle *>> parkingLot; // 2d vector which represents multistorey parking, tuple represents license plate and time at which the customer parked the vehicle
 
 public:
     Parking(int floors, int numberOfParking) : floors(floors), numberOfParking(numberOfParking)
