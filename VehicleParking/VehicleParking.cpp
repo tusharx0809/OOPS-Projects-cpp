@@ -1,6 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
+// ------------------------- VEHICLE CLASS -------------------------- //
 
+class Vehicle
+{
+protected:
+    
+};
+
+
+// ------------------------- CAR CLASS -------------------------- //
+
+
+// ------------------------- BIKE CLASS -------------------------- //
+
+// ------------------------- PARKING CLASS -------------------------- //
 class Parking
 {
 private:
@@ -53,7 +67,7 @@ public:
         auto tp1 = chrono::system_clock::from_time_t(mktime(&tm1));
         auto tp2 = chrono::system_clock::from_time_t(mktime(&tm2));
 
-        long int parkingTime = chrono::duration_cast<chrono::minutes>(tp2- tp1).count();
+        long int parkingTime = chrono::duration_cast<chrono::minutes>(tp2 - tp1).count();
 
         return parkingTime;
     }
@@ -112,7 +126,7 @@ public:
                 parkingLot[floor][spot] = make_tuple("", "", "");
                 cout << get<1>(parkingLot[floor][spot]) << " " << licensePlate << " exited from floor:" << floor << " and spot: " << spot << " at: " << exitDateTime << " Charges: " << charges << endl;
                 saveParkingLotToFile("parking_lot.txt");
-                displayParkingLot();  // Now called only once
+                displayParkingLot(); // Now called only once
                 logChargesToFile(licensePlate, exitDateTime, totalParkingTime, charges, "charges.txt");
                 return true;
             }
@@ -200,70 +214,70 @@ public:
 
     // Function to load the parking lot txt file when the main function is executed
     void loadParkingLotFromFile(const string &filename)
-{
-    ifstream file(filename);
-
-    if (!file.is_open())
     {
-        cout << "Error Opening File!" << endl;
-        return;
-    }
+        ifstream file(filename);
 
-    string line;
-    int floor = -1;
-    int spot = -1;
-
-    while (getline(file, line))
-    {
-        // Detect the floor based on the "Floor" keyword
-        if (line.find("Floor") != string::npos)
+        if (!file.is_open())
         {
-            floor++;
-            spot = -1;  // Reset spot index when a new floor is encountered
+            cout << "Error Opening File!" << endl;
+            return;
         }
-        // Detect the spot based on the "Spot" keyword
-        else if (line.find("Spot") != string::npos)
+
+        string line;
+        int floor = -1;
+        int spot = -1;
+
+        while (getline(file, line))
         {
-            spot++;
-            size_t pos = line.find("Vehicle ");
-            if (pos != string::npos)
+            // Detect the floor based on the "Floor" keyword
+            if (line.find("Floor") != string::npos)
             {
-                size_t time_pos = line.find(" entered at ");
-                size_t type_pos = line.find(" type ") + 6; // Fix the position for type field
-
-                string licensePlate = line.substr(pos + 8, type_pos - (pos + 8) - 6);  // Extract license plate
-                string type = line.substr(type_pos, time_pos - type_pos);               // Extract vehicle type
-                string time = line.substr(time_pos + 12);  // Extract time, adjusted by " entered at "
-
-                // Check if license plate, type, or time are empty or invalid
-                if (!licensePlate.empty() && !type.empty() && !time.empty())
+                floor++;
+                spot = -1; // Reset spot index when a new floor is encountered
+            }
+            // Detect the spot based on the "Spot" keyword
+            else if (line.find("Spot") != string::npos)
+            {
+                spot++;
+                size_t pos = line.find("Vehicle ");
+                if (pos != string::npos)
                 {
-                    // Store all information in parkingLot tuple
-                    parkingLot[floor][spot] = make_tuple(licensePlate, type, time);
+                    size_t time_pos = line.find(" entered at ");
+                    size_t type_pos = line.find(" type ") + 6; // Fix the position for type field
+
+                    string licensePlate = line.substr(pos + 8, type_pos - (pos + 8) - 6); // Extract license plate
+                    string type = line.substr(type_pos, time_pos - type_pos);             // Extract vehicle type
+                    string time = line.substr(time_pos + 12);                             // Extract time, adjusted by " entered at "
+
+                    // Check if license plate, type, or time are empty or invalid
+                    if (!licensePlate.empty() && !type.empty() && !time.empty())
+                    {
+                        // Store all information in parkingLot tuple
+                        parkingLot[floor][spot] = make_tuple(licensePlate, type, time);
+                    }
+                    else
+                    {
+                        // If data is incomplete, mark as empty
+                        parkingLot[floor][spot] = make_tuple("", "", "");
+                    }
                 }
                 else
                 {
-                    // If data is incomplete, mark as empty
+                    // If no vehicle is found, mark the spot as empty
                     parkingLot[floor][spot] = make_tuple("", "", "");
                 }
             }
-            else
-            {
-                // If no vehicle is found, mark the spot as empty
-                parkingLot[floor][spot] = make_tuple("", "", "");
-            }
         }
     }
-}
-
 };
 
+// ------------------------- MAIN FUNCTION -------------------------- //
 int main()
 {
     Parking parking(2, 5);
 
     // Park some vehicles
-    parking.removeVehicle("ABC123");
+    parking.displayParkingLot();
 
     // Vehicle will be removed
 
