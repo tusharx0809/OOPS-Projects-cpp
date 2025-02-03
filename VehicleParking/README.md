@@ -18,7 +18,6 @@
             <li><strong>string getCurrentDateTime():</strong> Returns string of current date time in format "MM-DD-YYYY, HH:MM"</li>
             <li><strong>long int getParkingTime():</strong> Takes two arguments as entry time and exit time and returns the differnce in minutes.</li>
             <li><strong>void displayParkingLot():</strong></li>
-
         </ul>
     </li>
     <li>Inherited class for car and bikes/scooters.</li>
