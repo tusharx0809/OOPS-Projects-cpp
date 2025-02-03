@@ -31,5 +31,16 @@
             <li><strong>string getEntryTime()</strong>: Returns entry time of Vehicle</li>
         </ul>
     </li>
-    <li>Different parking charges for cars and bikes.</li>
+    <li>
+        Car Class: Inherited from Vehicle
+        <ul>
+            <li><strong>double getChargesPerMinute():</strong>Overriden function that return charges per minute for Car(Rs.0.2)</li>
+        </ul>
+    </li>
+    <li>
+        Bike Class: Inherited from Vehicle
+        <ul>
+            <li><strong>double getChargesPerMinute():</strong>Overriden function that return charges per minute for Bike(Rs.0.1)</li>
+        </ul>
+    </li>
 </ul>
