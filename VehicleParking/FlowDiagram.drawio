@@ -43,10 +43,10 @@
                 <mxCell id="27" value="&lt;span style=&quot;box-sizing: border-box; font-weight: var(--base-text-weight-semibold, 600); color: rgb(240, 246, 252); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 16px; text-align: left; background-color: rgb(13, 17, 23);&quot;&gt;string getEntryTime()&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=19;strokeWidth=0;" parent="1" vertex="1">
                     <mxGeometry x="650" y="140" width="270" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="35" style="edgeStyle=none;html=1;entryX=0.465;entryY=-0.02;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=19;fontColor=#000000;" parent="1" source="28" target="29" edge="1">
+                <mxCell id="35" style="edgeStyle=none;html=1;entryX=0.465;entryY=-0.02;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=19;fontColor=#000000;strokeColor=#FFFFFF;" parent="1" source="28" target="29" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="37" style="edgeStyle=none;html=1;entryX=0.429;entryY=-0.04;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=19;fontColor=#000000;" parent="1" source="28" target="32" edge="1">
+                <mxCell id="37" style="edgeStyle=none;html=1;entryX=0.429;entryY=-0.04;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=19;fontColor=#000000;strokeColor=#FFFFFF;" parent="1" source="28" target="32" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="28" value="&lt;span style=&quot;box-sizing: border-box; font-weight: var(--base-text-weight-semibold, 600); color: rgb(240, 246, 252); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, &amp;quot;Noto Sans&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 16px; text-align: left; background-color: rgb(13, 17, 23);&quot;&gt;virtual double getChargesPerMinute()&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontSize=19;strokeWidth=0;" parent="1" vertex="1">
