@@ -174,7 +174,7 @@ public:
                 delete parkingLot[floor][spot];
                 parkingLot[floor][spot] = nullptr;
                 saveParkingLotToFile("parking_lot.txt");
-                displayParkingLot(); // Now called only once   
+                displayParkingLot(); 
                 return true;
             }
             spot++;
